@@ -1,17 +1,39 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
-        }
+import javax.swing.*;
+import java.awt.*;
+
+public class Main extends JFrame {
+    public Main() {
+        Board board = new Board();
+        MainController controller = new MainController();
+        FileDisplay fileDisplay = new FileDisplay();
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+        JTextField field = new JTextField("");
+        JButton okButton = new JButton("OK");
+        JLabel statusBar = new JLabel("Status Bar",  SwingConstants.CENTER);
+
+        setLayout(new BorderLayout());
+        topPanel.add(new JLabel("URL:"), BorderLayout.WEST);
+        topPanel.add(okButton, BorderLayout.EAST);
+        topPanel.add(field, BorderLayout.CENTER);
+
+        add(topPanel, BorderLayout.NORTH);
+        add(statusBar, BorderLayout.SOUTH);
+        add(fileDisplay, BorderLayout.EAST);
+        add(board, BorderLayout.CENTER);
+
+
     }
+
+    public static void main(String[] args) {
+        Main main = new Main();
+        main.setTitle("Assignment 3");
+        main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        main.setSize(800, 600);
+        main.setVisible(true);
+    }
+
 }
