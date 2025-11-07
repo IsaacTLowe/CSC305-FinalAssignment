@@ -7,8 +7,9 @@ import java.awt.*;
 public class Main extends JFrame {
     public Main() {
         Board board = new Board();
+        Metrics metric = new Metrics();
         MainController controller = new MainController();
-        FileDisplay fileDisplay = new FileDisplay();
+        //FileDisplay fileDisplay = new FileDisplay();
 
         JPanel topPanel = new JPanel(new BorderLayout());
         JTextField field = new JTextField("");
@@ -22,8 +23,8 @@ public class Main extends JFrame {
 
         add(topPanel, BorderLayout.NORTH);
         add(statusBar, BorderLayout.SOUTH);
-        add(fileDisplay, BorderLayout.EAST);
-        add(board, BorderLayout.CENTER);
+        //add(fileDisplay, BorderLayout.WEST);
+        add(metric, BorderLayout.CENTER);
 
 
     }
