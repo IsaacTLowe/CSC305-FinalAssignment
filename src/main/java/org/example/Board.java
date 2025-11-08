@@ -9,6 +9,7 @@ import java.beans.PropertyChangeListener;
 public class Board extends JPanel implements PropertyChangeListener {
     private boolean loading = false;
     private boolean ready = false;
+    private int maxLines = 0;
 
     public Board() {
         setBackground(Color.WHITE);
@@ -40,6 +41,13 @@ public class Board extends JPanel implements PropertyChangeListener {
 
     private void drawSquares(Graphics g) {
         java.util.List<Square> squares = Blackboard.getInstance().getSquares();
+
+        for (Square s : squares) {
+            if (s.getLinesOfCode() > maxLines) {
+                maxLines = s.getLinesOfCode();
+            }
+        }
+
         int cols = (int) Math.ceil(Math.sqrt(squares.size()));
         int rows = (int) Math.ceil((double) squares.size() / cols);
         int squareWidth = getWidth() / cols;
@@ -71,8 +79,14 @@ public class Board extends JPanel implements PropertyChangeListener {
     }
 
     private Color calculateColor(int lines) {
-        if (lines < 50) return new Color(180, 240, 180);
-        else if (lines < 200) return new Color(255, 245, 150);
-        else return new Color(240, 140, 140);
+        double ratio = (double) lines / maxLines;
+
+        if (ratio <= 1.0 / 3.0) {
+            return new Color(180, 240, 180);   // green
+        } else if (ratio <= 2.0 / 3.0) {
+            return new Color(255, 245, 150);   // yellow
+        } else {
+            return new Color(240, 140, 140);   // red
+        }
     }
 }

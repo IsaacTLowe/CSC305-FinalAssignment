@@ -8,6 +8,7 @@ public class Blackboard extends PropertyChangeSupport {
 
     private static Blackboard instance;
     private Vector<Square> squares;
+    private int size;
     private boolean ready = false;
     private boolean loading = false;
     private String filePath; //DummyValue for now
@@ -18,20 +19,56 @@ public class Blackboard extends PropertyChangeSupport {
     }
 
     public static Blackboard getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new Blackboard();
         }
         return instance;
     }
-    public void loadFromUrl(String url){
-        // implement when driver is implemented 
+
+    public void loadFromUrl(String url) {
+        try {
+            Driver driver = new Driver(url);
+            Thread t = new Thread(driver);
+            t.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setSize(int size){
+        this.size = size;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void addSquare(Square square) {
+        squares.add(square);
+    }
+
+    public void setReady() {
+        ready = true;
+        firePropertyChange("blackboardReady", false, true);
+    }
+
+    public void setLoading(boolean loading) {
+        ready = loading;
+        firePropertyChange("blackboardLoading", false, true);
     }
 
     public List<Square> getSquares() {
         return squares;
     }
-    //once driver is implemented; implement a way to acquire the FilePathing (for fileDisplay)
+
     public String getFilePath(){
         return filePath;
     }
+
+    public void clear() {
+        squares.clear();
+        ready = false;
+        loading = false;
+    }
+
 }
