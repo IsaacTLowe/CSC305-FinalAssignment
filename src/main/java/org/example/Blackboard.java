@@ -11,7 +11,7 @@ public class Blackboard extends PropertyChangeSupport {
     private int size;
     private boolean ready = false;
     private boolean loading = false;
-    private String filePath; //DummyValue for now
+    private String filePath;
 
     private Blackboard() {
         super(new Object());
@@ -55,6 +55,9 @@ public class Blackboard extends PropertyChangeSupport {
     public void setLoading(boolean loading) {
         ready = loading;
         firePropertyChange("blackboardLoading", false, true);
+    }
+    public void setFilePath(String filePath){
+        this.filePath=filePath;
     }
 
     public List<Square> getSquares() {

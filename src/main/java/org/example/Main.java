@@ -14,7 +14,7 @@ public class Main extends JFrame {
         Board board = new Board();
         Metrics metric = new Metrics();
         MainController controller = new MainController(urlField);
-        //FileDisplay fileDisplay = new FileDisplay();
+        FileDisplay fileDisplay = new FileDisplay();
 
 
 
@@ -23,11 +23,14 @@ public class Main extends JFrame {
         topPanel.add(okButton, BorderLayout.EAST);
         topPanel.add(urlField, BorderLayout.CENTER);
 
+        JTabbedPane panel = new JTabbedPane();
         add(topPanel, BorderLayout.NORTH);
         add(statusBar, BorderLayout.SOUTH);
-        add(board, BorderLayout.CENTER);
-        //add(fileDisplay, BorderLayout.WEST);
-        //add(metric, BorderLayout.CENTER);
+        //add(board, BorderLayout.CENTER);
+        panel.add("Grid",board);
+        panel.add("Metrics",metric);
+        add(fileDisplay, BorderLayout.WEST);
+        add(panel, BorderLayout.CENTER);
 
         okButton.addActionListener(controller);
 
