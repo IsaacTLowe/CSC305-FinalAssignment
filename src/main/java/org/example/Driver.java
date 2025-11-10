@@ -26,11 +26,16 @@ public class Driver implements Runnable {
             for (String path : allFromUrl) {
                 if (path.endsWith(".java")) {
                     String content = gh.getFileContentFromUrl(convertToBlobUrl(url, path));
-                    System.out.println("Content of " + path + ":");
+                    //System.out.println("Content of " + path + ":");
                     int lines = countLines(content);
-                    Square square = new Square(path, lines);
+                    boolean abstraction = FileAnalyzer.isAbstract(content);
+                    Square square = new Square(path, lines, abstraction, content);
                     Blackboard.getInstance().addSquare(square);
                 }
+            }
+            java.util.List<Square> totalSquares = Blackboard.getInstance().getSquares();
+            for(Square currSquare : totalSquares){
+                FileAnalyzer.countOccurrences(currSquare);
             }
             Blackboard.getInstance().setReady();
             Thread.sleep(1000);

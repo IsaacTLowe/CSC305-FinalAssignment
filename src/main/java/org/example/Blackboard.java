@@ -67,11 +67,16 @@ public class Blackboard extends PropertyChangeSupport {
     public String getFilePath(){
         return filePath;
     }
+    public void incrementOut(Square instance){
+        
+    }
 
     public void clear() {
         squares.clear();
         ready = false;
         loading = false;
+        size = 0;
+        filePath = "";
     }
 
 }

@@ -2,8 +2,11 @@ package org.example;
 
 
 import java.beans.*;
+
 import javax.swing.*;
+
 import java.awt.*;
+import java.util.Vector;
 
 public class Metrics extends JPanel implements PropertyChangeListener{
     
@@ -27,6 +30,7 @@ public class Metrics extends JPanel implements PropertyChangeListener{
             drawPainful(g, radius, height);
             g.setColor(Color.BLACK);
             g.drawLine(0, 0, width, height);
+            drawDots(g);
         }
     
     }
@@ -63,4 +67,36 @@ public class Metrics extends JPanel implements PropertyChangeListener{
 		setFont(new Font("Arial", Font.PLAIN, 12));
 		g.drawString("Loading...", width / 2 - 30, height / 2);
     }
+    public void drawDots(Graphics g) {
+        java.util.List<Square> squares = Blackboard.getInstance().getSquares();
+        if (squares == null || squares.isEmpty()) return;
+
+        int panelWidth = getWidth();
+        int panelHeight = getHeight();
+        int dotRadius = 3;
+        int margin = dotRadius + 2; // ensures full visibility
+
+        g.setColor(Color.BLACK);
+
+        for (Square s : squares) {
+            double instability = s.getInstability();  // expected 0–1 range
+            boolean abstraction = s.getAbstraction();
+
+            int abs = abstraction ? 0 : 1;
+
+            // Scale with margin buffer
+            int x = (int) (instability * (panelWidth - 2 * margin)) + margin;
+            int y = (int) (abs * (panelHeight - 2 * margin)) + margin;
+            FontMetrics fm = g.getFontMetrics();
+
+            // Draw small filled circle
+            g.fillOval(x - dotRadius, y - dotRadius, dotRadius * 2, dotRadius * 2);
+            String name = s.getName();
+            int textWidth = fm.stringWidth(name);
+            int textX = x - textWidth / 2;
+            int textY = y - dotRadius - 4; // slightly above the dot
+            g.drawString(name, textX, textY);
+        }
+    }
+
 }
