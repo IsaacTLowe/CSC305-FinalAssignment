@@ -2,10 +2,13 @@ package org.example;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
+
 
 public class FileDisplay extends JPanel implements PropertyChangeListener {
 
@@ -86,6 +89,19 @@ public class FileDisplay extends JPanel implements PropertyChangeListener {
 
             expandAllNodes(tree, 0, tree.getRowCount());
 
+            tree.addTreeSelectionListener(new TreeSelectionListener() {
+                @Override
+                public void valueChanged(TreeSelectionEvent e) {
+                    DefaultMutableTreeNode selectedNode =
+                            (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+                    if (selectedNode == null) return;
+
+                    String selectedFile = selectedNode.toString();
+                    System.out.println("Selected file: " + selectedFile);
+
+                    Blackboard.getInstance().setSelectedFile(selectedFile);
+                }
+            });
             JScrollPane scrollPane = new JScrollPane(tree);
             scrollPane.setPreferredSize(new Dimension(175, 300));
 
@@ -94,4 +110,6 @@ public class FileDisplay extends JPanel implements PropertyChangeListener {
             repaint();
         }
     }
+
+
 }

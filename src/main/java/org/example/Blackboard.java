@@ -12,6 +12,7 @@ public class Blackboard extends PropertyChangeSupport {
     private boolean ready = false;
     private boolean loading = false;
     private String filePath;
+    private String selectedFile;
 
     private Blackboard() {
         super(new Object());
@@ -67,9 +68,8 @@ public class Blackboard extends PropertyChangeSupport {
     public String getFilePath(){
         return filePath;
     }
-    public void incrementOut(Square instance){
-        
-    }
+
+    public void incrementOut(Square instance){}
 
     public void clear() {
         squares.clear();
@@ -79,4 +79,13 @@ public class Blackboard extends PropertyChangeSupport {
         filePath = "";
     }
 
+    public void setSelectedFile(String selectedFile) {
+        String oldFile = this.selectedFile;
+        this.selectedFile = selectedFile;
+        firePropertyChange("selectedFile", oldFile, selectedFile);
+    }
+
+    public String getSelectedFile() {
+        return selectedFile;
+    }
 }

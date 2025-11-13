@@ -18,7 +18,6 @@ public class FileAnalyzer {
 
         for (String line : lines) {
             String trimmed = line.trim();
-            // Skip comments
             if (trimmed.startsWith("//") || trimmed.startsWith("/*") || trimmed.startsWith("*")) continue;
 
             if (trimmed.contains("abstract class ")) {
@@ -28,7 +27,7 @@ public class FileAnalyzer {
             }
         }
 
-        return false; // no abstract or interface found
+        return false;
     }
     public static int countOccurrences(Square currSquare) {
         java.util.List<Square> squares = Blackboard.getInstance().getSquares();

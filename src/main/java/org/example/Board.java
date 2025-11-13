@@ -10,6 +10,7 @@ public class Board extends JPanel implements PropertyChangeListener {
     private boolean loading = false;
     private boolean ready = false;
     private int maxLines = 0;
+    private String selectedFile = null;
 
     public Board() {
         setBackground(Color.WHITE);
@@ -25,6 +26,8 @@ public class Board extends JPanel implements PropertyChangeListener {
         } else if (evt.getPropertyName().equals("blackboardReady")) {
             loading = false;
             ready = true;
+        } else if (evt.getPropertyName().equals("selectedFile")) {
+            selectedFile = Blackboard.getInstance().getSelectedFile();
         }
         repaint();
     }
@@ -46,6 +49,12 @@ public class Board extends JPanel implements PropertyChangeListener {
             if (s.getLinesOfCode() > maxLines) {
                 maxLines = s.getLinesOfCode();
             }
+        }
+
+        if(selectedFile != null && !selectedFile.isEmpty()) {
+            squares = squares.stream()
+                    .filter(s -> s.getPath().endsWith(selectedFile))
+                    .toList();
         }
 
         int cols = (int) Math.ceil(Math.sqrt(squares.size()));

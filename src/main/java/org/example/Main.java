@@ -16,8 +16,6 @@ public class Main extends JFrame {
         MainController controller = new MainController(urlField);
         FileDisplay fileDisplay = new FileDisplay();
 
-
-
         setLayout(new BorderLayout());
         topPanel.add(new JLabel("URL:"), BorderLayout.WEST);
         topPanel.add(okButton, BorderLayout.EAST);

@@ -12,6 +12,7 @@ public class Metrics extends JPanel implements PropertyChangeListener{
     
     private boolean loading = false;
 	private boolean ready = true;
+    private String selectedFile = null;
 
     public Metrics(){
         setBackground(Color.WHITE);
@@ -43,6 +44,8 @@ public class Metrics extends JPanel implements PropertyChangeListener{
         } else if (evt.getPropertyName().equals("blackboardReady")) {
             loading = false;
             ready = true;
+        } else if (evt.getPropertyName().equals("selectedFile")) {
+            selectedFile = Blackboard.getInstance().getSelectedFile();
         }
         repaint();
     }
@@ -70,6 +73,12 @@ public class Metrics extends JPanel implements PropertyChangeListener{
     public void drawDots(Graphics g) {
         java.util.List<Square> squares = Blackboard.getInstance().getSquares();
         if (squares == null || squares.isEmpty()) return;
+
+        if(selectedFile != null && !selectedFile.isEmpty()) {
+            squares = squares.stream()
+                    .filter(s -> s.getPath().endsWith(selectedFile))
+                    .toList();
+        }
 
         int panelWidth = getWidth();
         int panelHeight = getHeight();
