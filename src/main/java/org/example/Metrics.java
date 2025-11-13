@@ -1,12 +1,8 @@
 package org.example;
-
-
 import java.beans.*;
-
 import javax.swing.*;
-
 import java.awt.*;
-import java.util.Vector;
+
 
 public class Metrics extends JPanel implements PropertyChangeListener{
     
@@ -38,7 +34,7 @@ public class Metrics extends JPanel implements PropertyChangeListener{
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         System.out.println(evt.getPropertyName());
-        if (evt.getPropertyName().equals("blackboardLoading")) {
+        if(evt.getPropertyName().equals("blackboardLoading")) {
             loading = true;
             ready = false;
         } else if (evt.getPropertyName().equals("blackboardReady")) {
@@ -53,7 +49,6 @@ public class Metrics extends JPanel implements PropertyChangeListener{
     public void drawUseless(Graphics g, int radius, int width){
         g.setColor(Color.BLUE);
         g.fillArc(width-radius, 0-radius, radius * 2, radius * 2, 180, 90);
-        //setFont(new Font("Arial", Font.PLAIN, 12));
         g.setColor(Color.WHITE);
         g.drawString("useless", width - radius+60, radius / 2);
     }
@@ -61,7 +56,6 @@ public class Metrics extends JPanel implements PropertyChangeListener{
     public void drawPainful(Graphics g, int radius, int height){
         g.setColor(Color.RED);
         g.fillArc(0-radius, height - radius, radius * 2, radius * 2, 0, 90);
-        //setFont(new Font("Arial", Font.PLAIN, 12));
         g.setColor(Color.WHITE);
         g.drawString("painful", radius / 3, height - radius / 2);
     }
@@ -83,27 +77,25 @@ public class Metrics extends JPanel implements PropertyChangeListener{
         int panelWidth = getWidth();
         int panelHeight = getHeight();
         int dotRadius = 3;
-        int margin = dotRadius + 2; // ensures full visibility
+        int margin = dotRadius + 2;
 
         g.setColor(Color.BLACK);
 
         for (Square s : squares) {
-            double instability = s.getInstability();  // expected 0–1 range
+            double instability = s.getInstability();
             boolean abstraction = s.getAbstraction();
 
             int abs = abstraction ? 0 : 1;
 
-            // Scale with margin buffer
             int x = (int) (instability * (panelWidth - 2 * margin)) + margin;
             int y = (int) (abs * (panelHeight - 2 * margin)) + margin;
             FontMetrics fm = g.getFontMetrics();
 
-            // Draw small filled circle
             g.fillOval(x - dotRadius, y - dotRadius, dotRadius * 2, dotRadius * 2);
             String name = s.getName();
             int textWidth = fm.stringWidth(name);
             int textX = x - textWidth / 2;
-            int textY = y - dotRadius - 4; // slightly above the dot
+            int textY = y - dotRadius - 4;
             g.drawString(name, textX, textY);
         }
     }

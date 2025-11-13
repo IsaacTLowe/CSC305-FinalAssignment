@@ -42,10 +42,9 @@ public class FileAnalyzer {
             if (name.endsWith(".java")) {
                 name = name.substring(0, name.length() - 5);
             }
-            //System.out.println("Current Square: "+name+ " the fileContent: "+fileContent);
+            
             if (fileContent.contains(name)) {
-                //System.out.println("CurrSquare: "+currSquare.getName()+ "Compare: "+compare.getName());
-                compare.incIn(); // Count each name only once, even if it appears multiple times
+                compare.incIn(); 
                 currSquare.incOut();
             }
         }

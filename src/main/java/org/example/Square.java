@@ -41,9 +41,6 @@ public class Square {
         return fileContent;
     }
     public double getInstability(){
-        //System.out.println("Square: "+getName());
-        //System.out.println("Out: "+ out + " In: "+in);
-        //System.out.println("Instance: "+(out/(in+out)));
         if(out+in == 0){
             return 0;
         }
