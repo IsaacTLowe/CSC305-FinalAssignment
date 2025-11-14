@@ -21,12 +21,10 @@ public class Driver implements Runnable {
             String token = "TOKEN";
             GitHubHandler gh = new GitHubHandler(token);
             List<String> allFromUrl = gh.listFilesRecursive(url);
-            //System.out.print("This is URL: "+url);
             Blackboard.getInstance().setUrl(url);
             for (String path : allFromUrl) {
                 if (path.endsWith(".java")) {
                     String content = gh.getFileContentFromUrl(convertToBlobUrl(url, path));
-                    //System.out.println("Content of " + path + ":");
                     int lines = countLines(content);
                     boolean abstraction = FileAnalyzer.isAbstract(content);
                     Square square = new Square(path, lines, abstraction, content);

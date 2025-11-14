@@ -10,7 +10,6 @@ public class Board extends JPanel implements PropertyChangeListener {
     private boolean loading = false;
     private boolean ready = false;
     private int maxLines = 0;
-    private String selectedFile = null;
     private java.util.List<Square> squares;
 
     public Board() {
@@ -30,9 +29,6 @@ public class Board extends JPanel implements PropertyChangeListener {
             squares = Blackboard.getInstance().getSquares();
         } else if (evt.getPropertyName().equals("selectedFile")) {
             squares = Blackboard.getInstance().getSquaresDisplay();
-            //getSquares("file", Blackboard.getInstance().getSelected());
-        }else if (evt.getPropertyName().equals("selectedFolder")){
-            //getSquares("folder", Blackboard.getInstance().getSelected());
         }
         repaint();
     }
@@ -91,30 +87,11 @@ public class Board extends JPanel implements PropertyChangeListener {
         double ratio = (double) lines / maxLines;
 
         if (ratio <= 1.0 / 3.0) {
-            return new Color(180, 240, 180);   // green
+            return new Color(180, 240, 180);
         } else if (ratio <= 2.0 / 3.0) {
-            return new Color(255, 245, 150);   // yellow
+            return new Color(255, 245, 150);
         } else {
-            return new Color(240, 140, 140);   // red
-        }
-    }
-    public void getSquares(String type, String selected){
-        squares = Blackboard.getInstance().getSquares();
-        switch(type){
-            case "file":
-                    if(selected != null && !selected.isEmpty()) {
-                        squares = squares.stream()
-                        .filter(s -> s.getPath().endsWith(selected))
-                        .toList();
-                    }
-                    break;
-            case "folder":
-                    if(selected != null && !selected.isEmpty()) {
-                        squares = squares.stream()
-                        .filter(s -> s.getPath().contains(selected))
-                        .toList();
-                    }
-                    break;
+            return new Color(240, 140, 140);
         }
     }
 }

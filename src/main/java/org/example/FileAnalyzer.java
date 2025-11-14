@@ -44,7 +44,7 @@ public class FileAnalyzer {
             }
             
             if (fileContent.contains(name)) {
-                compare.incIn(); 
+                compare.incIn();
                 currSquare.incOut();
             }
         }

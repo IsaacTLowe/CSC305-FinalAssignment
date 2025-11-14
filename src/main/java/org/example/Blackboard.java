@@ -95,11 +95,6 @@ public class Blackboard extends PropertyChangeSupport {
         this.selected = selected;
         firePropertyChange("selectedFile", old, selected);
     }
-    public void setSelectedFolder(String selected){
-        String old = this.selected;
-        this.selected = selected;
-        firePropertyChange("selectedFolder", old, selected);
-    }
 
     public String getSelected() {
         return selected;

@@ -8,7 +8,6 @@ public class Metrics extends JPanel implements PropertyChangeListener{
     
     private boolean loading = false;
 	private boolean ready = true;
-    private String selectedFile = null;
     private java.util.List<Square> squares;
 
     public Metrics(){
@@ -44,10 +43,6 @@ public class Metrics extends JPanel implements PropertyChangeListener{
             squares = Blackboard.getInstance().getSquares();
         } else if (evt.getPropertyName().equals("selectedFile")) {
             squares = Blackboard.getInstance().getSquaresDisplay();
-            //getSquares("file", Blackboard.getInstance().getSelected());
-        }else if (evt.getPropertyName().equals("selectedFolder")){
-            squares = Blackboard.getInstance().getSquaresDisplay();
-            //getSquares("folder", Blackboard.getInstance().getSelected());
         }
         repaint();
     }
@@ -58,7 +53,6 @@ public class Metrics extends JPanel implements PropertyChangeListener{
         g.setColor(Color.WHITE);
         g.drawString("useless", width - radius+60, radius / 2);
     }
-
     public void drawPainful(Graphics g, int radius, int height){
         g.setColor(Color.RED);
         g.fillArc(0-radius, height - radius, radius * 2, radius * 2, 0, 90);
@@ -97,25 +91,6 @@ public class Metrics extends JPanel implements PropertyChangeListener{
             int textX = x - textWidth / 2;
             int textY = y - dotRadius - 4;
             g.drawString(name, textX, textY);
-        }
-    }
-    public void getSquares(String type, String selected){
-        squares = Blackboard.getInstance().getSquares();
-        switch(type){
-            case "file":
-                    if(selected != null && !selected.isEmpty()) {
-                        squares = squares.stream()
-                        .filter(s -> s.getPath().endsWith(selected))
-                        .toList();
-                    }
-                    break;
-            case "folder":
-                    if(selected != null && !selected.isEmpty()) {
-                        squares = squares.stream()
-                        .filter(s -> s.getPath().contains(selected))
-                        .toList();
-                    }
-                    break;
         }
     }
 
