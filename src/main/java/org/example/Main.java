@@ -3,18 +3,19 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
 
 public class Main extends JFrame {
     public Main() {
         JPanel topPanel = new JPanel(new BorderLayout());
         JTextField urlField = new JTextField("");
         JButton okButton = new JButton("OK");
-        JLabel statusBar = new JLabel("Status Bar",  SwingConstants.CENTER);
+        JLabel statusBar = new JLabel("Status: ",  SwingConstants.CENTER);
 
         Board board = new Board();
         Metrics metric = new Metrics();
         JPanel diagram = new JPanel();
-        MainController controller = new MainController(urlField);
+        MainController controller = new MainController(urlField, statusBar);
         FileDisplay fileDisplay = new FileDisplay();
 
         setLayout(new BorderLayout());

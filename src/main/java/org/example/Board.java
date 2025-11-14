@@ -2,6 +2,8 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -15,6 +17,16 @@ public class Board extends JPanel implements PropertyChangeListener {
     public Board() {
         setBackground(Color.WHITE);
         Blackboard.getInstance().addPropertyChangeListener(this);
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Square clicked = getSquareAt(e.getX(), e.getY());
+                if (clicked != null) {
+                    Blackboard.getInstance().setSelectedStatus(clicked.getPath());
+                }
+            }
+        });
     }
 
     @Override
@@ -36,9 +48,7 @@ public class Board extends JPanel implements PropertyChangeListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (loading) {
-            drawLoading(g);
-        } else if (ready) {
+        if (ready) {
             drawSquares(g);
         }
     }
@@ -77,11 +87,6 @@ public class Board extends JPanel implements PropertyChangeListener {
         }
     }
 
-    private void drawLoading(Graphics g) {
-        g.setColor(Color.BLACK);
-        setFont(new Font("Arial", Font.PLAIN, 12));
-        g.drawString("Loading...", getWidth() / 2 - 30, getHeight() / 2);
-    }
 
     private Color calculateColor(int lines) {
         double ratio = (double) lines / maxLines;
@@ -93,5 +98,27 @@ public class Board extends JPanel implements PropertyChangeListener {
         } else {
             return new Color(240, 140, 140);
         }
+    }
+
+    private Square getSquareAt(int x, int y) {
+        java.util.List<Square> squares = Blackboard.getInstance().getSquares();
+        if (squares.isEmpty()) return null;
+
+        int cols = (int) Math.ceil(Math.sqrt(squares.size()));
+        int rows = (int) Math.ceil((double) squares.size() / cols);
+        int w = getWidth() / cols;
+        int h = getHeight() / rows;
+
+        for (int i = 0; i < squares.size(); i++) {
+            int row = i / cols;
+            int col = i % cols;
+            int sx = col * w;
+            int sy = row * h;
+
+            if (x >= sx && x < sx + w && y >= sy && y < sy + h) {
+                return squares.get(i);
+            }
+        }
+        return null;
     }
 }

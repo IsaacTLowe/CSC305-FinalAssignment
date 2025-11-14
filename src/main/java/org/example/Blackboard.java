@@ -10,9 +10,9 @@ public class Blackboard extends PropertyChangeSupport {
     private Vector<Square> squares;
     private int size;
     private boolean ready = false;
-    private boolean loading = false;
     private String url;
     private String selected;
+    private String statusBarText;
 
     private Blackboard() {
         super(new Object());
@@ -84,7 +84,7 @@ public class Blackboard extends PropertyChangeSupport {
     public void clear() {
         squares.clear();
         ready = false;
-        loading = false;
+        boolean loading = false;
         size = 0;
         url = "";
         selected = "";
@@ -94,9 +94,14 @@ public class Blackboard extends PropertyChangeSupport {
         String old = this.selected;
         this.selected = selected;
         firePropertyChange("selectedFile", old, selected);
+
+        setSelectedStatus(selected);
     }
 
-    public String getSelected() {
-        return selected;
+    public void setSelectedStatus(String statusBarText) {
+        String old = this.statusBarText;
+        this.statusBarText = statusBarText;
+        firePropertyChange("selectedStatus", old, statusBarText);
     }
+
 }
