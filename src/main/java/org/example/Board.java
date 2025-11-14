@@ -8,7 +8,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
- * Draws the board and squares
+ * Draws the board and squares, observes Blackboard property changes
  * @author Amelia Harris and Isaac Lowe
  * @version 2.2
  */

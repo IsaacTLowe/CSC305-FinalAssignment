@@ -7,7 +7,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
- * Handles user clicking on Squares, as well as clicking on the okButton to start the program
+ * Handles user clicking on Squares, clicking on the okButton to start the program, and the status bar's status. 
+ * Observes Blackboard.
  * @author Amelia Harris and Isaac Lowe
  * @version 2.2
  */

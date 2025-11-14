@@ -6,7 +6,7 @@ import javiergs.tulip.GitHubHandler;
 import java.util.List;
 
 /**
- * Driver enables us to get files from the GitHub repository
+ * Driver enables us to get files from the GitHub repository and stores in Blackboard
  * @author Amelia Harris and Isaac Lowe
  * @version 2.2
  */

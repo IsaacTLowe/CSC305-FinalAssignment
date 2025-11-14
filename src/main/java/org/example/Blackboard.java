@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Vector;
 
 /**
- * Stores data on the files, squares, url, selected file, and statusBar
+ * Stores data on the files, squares, url, selected file/folder, and is obserable
  * @author Amelia Harris and Isaac Lowe
  * @version 2.2
  */

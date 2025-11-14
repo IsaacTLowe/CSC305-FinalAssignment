@@ -2,7 +2,11 @@ package org.example;
 
 import javax.swing.event.*;
 import javax.swing.tree.*;
-
+/**
+ * FileDisplayController handles clicks on FileDisplay tree and stores selected in Blackboard.
+ * @author Amelia Harris and Isaac Lowe
+ * @version 2.2
+ */
 public class FileDisplayController implements TreeSelectionListener {
 
     @Override
