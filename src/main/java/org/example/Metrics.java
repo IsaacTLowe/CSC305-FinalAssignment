@@ -3,6 +3,11 @@ import java.beans.*;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Handles the display of the Metrics graph on the display
+ * @author Amelia Harris and Isaac Lowe
+ * @version 2.2
+ */
 
 public class Metrics extends JPanel implements PropertyChangeListener{
     

@@ -1,7 +1,12 @@
 package org.example;
 
 
-//Isaac
+/**
+ * Square controls all aspects related to the Square's that are drawn on the screen
+ * @author Amelia Harris and Isaac Lowe
+ * @version 2.2
+ */
+
 public class Square {
 
     private String path;

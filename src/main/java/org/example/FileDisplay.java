@@ -6,6 +6,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+/**
+ * FileDisplay uses JTree to display all the files on the left hand side of the screen for users to click through
+ * @author Amelia Harris and Isaac Lowe
+ * @version 2.2
+ */
 
 public class FileDisplay extends JPanel implements PropertyChangeListener {
 

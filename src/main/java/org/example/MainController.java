@@ -6,6 +6,12 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * Handles user clicking on Squares, as well as clicking on the okButton to start the program
+ * @author Amelia Harris and Isaac Lowe
+ * @version 2.2
+ */
+
 public class MainController implements ActionListener, PropertyChangeListener {
     private JTextField urlField;
     private JLabel statusBar;

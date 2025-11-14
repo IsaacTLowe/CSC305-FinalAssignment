@@ -4,6 +4,12 @@ package org.example;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Puts everything together as well as creating the overall GUI for the program
+ * @author Amelia Harris and Isaac Lowe
+ * @version 2.2
+ */
+
 public class Main extends JFrame {
     public Main() {
         JPanel topPanel = new JPanel(new BorderLayout());

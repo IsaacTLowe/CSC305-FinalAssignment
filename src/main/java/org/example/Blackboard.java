@@ -4,6 +4,12 @@ import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Vector;
 
+/**
+ * Stores data on the files, squares, url, selected file, and statusBar
+ * @author Amelia Harris and Isaac Lowe
+ * @version 2.2
+ */
+
 public class Blackboard extends PropertyChangeSupport {
 
     private static Blackboard instance;

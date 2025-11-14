@@ -5,7 +5,12 @@ import javiergs.tulip.GitHubHandler;
 
 import java.util.List;
 
-//Isaac
+/**
+ * Driver enables us to get files from the GitHub repository
+ * @author Amelia Harris and Isaac Lowe
+ * @version 2.2
+ */
+
 public class Driver implements Runnable {
 
     private String url;

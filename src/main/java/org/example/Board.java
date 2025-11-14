@@ -7,7 +7,12 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-//Isaac
+/**
+ * Draws the board and squares
+ * @author Amelia Harris and Isaac Lowe
+ * @version 2.2
+ */
+
 public class Board extends JPanel implements PropertyChangeListener {
     private boolean loading = false;
     private boolean ready = false;

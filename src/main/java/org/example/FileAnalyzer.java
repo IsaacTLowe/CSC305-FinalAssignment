@@ -2,7 +2,12 @@ package org.example;
 
 import java.util.List;
 
-//Isaac
+/**
+ * FileAnalyzer analyzes the files to see for abstractness, size, dependencies, etc
+ * @author Amelia Harris and Isaac Lowe
+ * @version 2.2
+ */
+
 public class FileAnalyzer {
 
     public static void analyze(String fileData) {
