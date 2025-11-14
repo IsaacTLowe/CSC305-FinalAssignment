@@ -9,6 +9,7 @@ public class Metrics extends JPanel implements PropertyChangeListener{
     private boolean loading = false;
 	private boolean ready = true;
     private String selectedFile = null;
+    private java.util.List<Square> squares;
 
     public Metrics(){
         setBackground(Color.WHITE);
@@ -40,8 +41,13 @@ public class Metrics extends JPanel implements PropertyChangeListener{
         } else if (evt.getPropertyName().equals("blackboardReady")) {
             loading = false;
             ready = true;
+            squares = Blackboard.getInstance().getSquares();
         } else if (evt.getPropertyName().equals("selectedFile")) {
-            selectedFile = Blackboard.getInstance().getSelectedFile();
+            squares = Blackboard.getInstance().getSquaresDisplay();
+            //getSquares("file", Blackboard.getInstance().getSelected());
+        }else if (evt.getPropertyName().equals("selectedFolder")){
+            squares = Blackboard.getInstance().getSquaresDisplay();
+            //getSquares("folder", Blackboard.getInstance().getSelected());
         }
         repaint();
     }
@@ -65,14 +71,8 @@ public class Metrics extends JPanel implements PropertyChangeListener{
 		g.drawString("Loading...", width / 2 - 30, height / 2);
     }
     public void drawDots(Graphics g) {
-        java.util.List<Square> squares = Blackboard.getInstance().getSquares();
+        
         if (squares == null || squares.isEmpty()) return;
-
-        if(selectedFile != null && !selectedFile.isEmpty()) {
-            squares = squares.stream()
-                    .filter(s -> s.getPath().endsWith(selectedFile))
-                    .toList();
-        }
 
         int panelWidth = getWidth();
         int panelHeight = getHeight();
@@ -97,6 +97,25 @@ public class Metrics extends JPanel implements PropertyChangeListener{
             int textX = x - textWidth / 2;
             int textY = y - dotRadius - 4;
             g.drawString(name, textX, textY);
+        }
+    }
+    public void getSquares(String type, String selected){
+        squares = Blackboard.getInstance().getSquares();
+        switch(type){
+            case "file":
+                    if(selected != null && !selected.isEmpty()) {
+                        squares = squares.stream()
+                        .filter(s -> s.getPath().endsWith(selected))
+                        .toList();
+                    }
+                    break;
+            case "folder":
+                    if(selected != null && !selected.isEmpty()) {
+                        squares = squares.stream()
+                        .filter(s -> s.getPath().contains(selected))
+                        .toList();
+                    }
+                    break;
         }
     }
 

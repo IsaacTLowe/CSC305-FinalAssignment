@@ -21,8 +21,8 @@ public class Driver implements Runnable {
             String token = "TOKEN";
             GitHubHandler gh = new GitHubHandler(token);
             List<String> allFromUrl = gh.listFilesRecursive(url);
-            System.out.print("This is URL: "+url);
-            Blackboard.getInstance().setFilePath(url);
+            //System.out.print("This is URL: "+url);
+            Blackboard.getInstance().setUrl(url);
             for (String path : allFromUrl) {
                 if (path.endsWith(".java")) {
                     String content = gh.getFileContentFromUrl(convertToBlobUrl(url, path));

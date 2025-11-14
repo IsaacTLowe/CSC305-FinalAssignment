@@ -11,6 +11,7 @@ public class Board extends JPanel implements PropertyChangeListener {
     private boolean ready = false;
     private int maxLines = 0;
     private String selectedFile = null;
+    private java.util.List<Square> squares;
 
     public Board() {
         setBackground(Color.WHITE);
@@ -26,8 +27,12 @@ public class Board extends JPanel implements PropertyChangeListener {
         } else if (evt.getPropertyName().equals("blackboardReady")) {
             loading = false;
             ready = true;
+            squares = Blackboard.getInstance().getSquares();
         } else if (evt.getPropertyName().equals("selectedFile")) {
-            selectedFile = Blackboard.getInstance().getSelectedFile();
+            squares = Blackboard.getInstance().getSquaresDisplay();
+            //getSquares("file", Blackboard.getInstance().getSelected());
+        }else if (evt.getPropertyName().equals("selectedFolder")){
+            //getSquares("folder", Blackboard.getInstance().getSelected());
         }
         repaint();
     }
@@ -43,20 +48,15 @@ public class Board extends JPanel implements PropertyChangeListener {
     }
 
     private void drawSquares(Graphics g) {
-        java.util.List<Square> squares = Blackboard.getInstance().getSquares();
-
+        if(squares.isEmpty()){
+            return;
+        }
         for (Square s : squares) {
             if (s.getLinesOfCode() > maxLines) {
                 maxLines = s.getLinesOfCode();
             }
         }
-
-        if(selectedFile != null && !selectedFile.isEmpty()) {
-            squares = squares.stream()
-                    .filter(s -> s.getPath().endsWith(selectedFile))
-                    .toList();
-        }
-
+        
         int cols = (int) Math.ceil(Math.sqrt(squares.size()));
         int rows = (int) Math.ceil((double) squares.size() / cols);
         int squareWidth = getWidth() / cols;
@@ -96,6 +96,25 @@ public class Board extends JPanel implements PropertyChangeListener {
             return new Color(255, 245, 150);   // yellow
         } else {
             return new Color(240, 140, 140);   // red
+        }
+    }
+    public void getSquares(String type, String selected){
+        squares = Blackboard.getInstance().getSquares();
+        switch(type){
+            case "file":
+                    if(selected != null && !selected.isEmpty()) {
+                        squares = squares.stream()
+                        .filter(s -> s.getPath().endsWith(selected))
+                        .toList();
+                    }
+                    break;
+            case "folder":
+                    if(selected != null && !selected.isEmpty()) {
+                        squares = squares.stream()
+                        .filter(s -> s.getPath().contains(selected))
+                        .toList();
+                    }
+                    break;
         }
     }
 }

@@ -11,8 +11,8 @@ public class Blackboard extends PropertyChangeSupport {
     private int size;
     private boolean ready = false;
     private boolean loading = false;
-    private String filePath;
-    private String selectedFile;
+    private String url;
+    private String selected;
 
     private Blackboard() {
         super(new Object());
@@ -57,35 +57,51 @@ public class Blackboard extends PropertyChangeSupport {
         ready = loading;
         firePropertyChange("blackboardLoading", false, true);
     }
-    public void setFilePath(String filePath){
-        this.filePath=filePath;
+    public void setUrl(String url){
+        this.url=url;
     }
 
     public List<Square> getSquares() {
         return squares;
     }
 
-    public String getFilePath(){
-        return filePath;
+    public List<Square> getSquaresDisplay() {
+        Vector<Square> displaySquares = new Vector<>();
+            for(Square currSquare : squares){
+                System.out.println("Current Square Path: " + currSquare.getPath() + " Selected: "+selected);
+                if(currSquare.getPath().contains(selected)){
+                    displaySquares.add(currSquare);
+                }
+
+            }
+        return displaySquares;
     }
 
-    public void incrementOut(Square instance){}
+    public String getUrl(){
+        return url;
+    }
 
     public void clear() {
         squares.clear();
         ready = false;
         loading = false;
         size = 0;
-        filePath = "";
+        url = "";
+        selected = "";
     }
 
-    public void setSelectedFile(String selectedFile) {
-        String oldFile = this.selectedFile;
-        this.selectedFile = selectedFile;
-        firePropertyChange("selectedFile", oldFile, selectedFile);
+    public void setSelectedFile(String selected) {
+        String old = this.selected;
+        this.selected = selected;
+        firePropertyChange("selectedFile", old, selected);
+    }
+    public void setSelectedFolder(String selected){
+        String old = this.selected;
+        this.selected = selected;
+        firePropertyChange("selectedFolder", old, selected);
     }
 
-    public String getSelectedFile() {
-        return selectedFile;
+    public String getSelected() {
+        return selected;
     }
 }

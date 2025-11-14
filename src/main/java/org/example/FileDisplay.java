@@ -78,7 +78,7 @@ public class FileDisplay extends JPanel implements PropertyChangeListener {
                     .map(Square::getPath)
                     .toList();
 
-            String repoUrl = Blackboard.getInstance().getFilePath();
+            String repoUrl = Blackboard.getInstance().getUrl();
             String repoName = repoUrl.substring(repoUrl.lastIndexOf("/") + 1);
 
             DefaultMutableTreeNode root = buildTreeFromPaths(paths, repoName);
