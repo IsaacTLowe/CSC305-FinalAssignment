@@ -68,8 +68,13 @@ public class Blackboard extends PropertyChangeSupport {
     public List<Square> getSquaresDisplay() {
         Vector<Square> displaySquares = new Vector<>();
             for(Square currSquare : squares){
-                System.out.println("Current Square Path: " + currSquare.getPath() + " Selected: "+selected);
-                if(currSquare.getPath().contains(selected)){
+                String filePath = selected + "/"+currSquare.getName();
+                if(currSquare.getPath().equals(selected)){
+                    filePath = selected;
+                }
+                if(currSquare.getPath().contains(filePath)){
+
+                    System.out.println("Current Square Path: " + currSquare.getPath() + " FilePath: "+filePath);
                     displaySquares.add(currSquare);
                 }
 
