@@ -47,6 +47,9 @@ public class MainController implements ActionListener, PropertyChangeListener {
                     statusBar.setText("Selected File: (none)");
                 }
                 break;
+            case "errorURL":
+                statusBar.setText("Status: ERROR invalid URL");
+                break;
         }
     }
 }

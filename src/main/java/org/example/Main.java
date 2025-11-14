@@ -3,7 +3,6 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseListener;
 
 public class Main extends JFrame {
     public Main() {

@@ -57,6 +57,10 @@ public class Blackboard extends PropertyChangeSupport {
         ready = loading;
         firePropertyChange("blackboardLoading", false, true);
     }
+    public void setErrorURL() {
+        ready = false;
+        firePropertyChange("errorURL", false, true);
+    }
     public void setUrl(String url){
         this.url=url;
     }
@@ -73,11 +77,8 @@ public class Blackboard extends PropertyChangeSupport {
                     filePath = selected;
                 }
                 if(currSquare.getPath().contains(filePath)){
-
-                    System.out.println("Current Square Path: " + currSquare.getPath() + " FilePath: "+filePath);
                     displaySquares.add(currSquare);
                 }
-
             }
         return displaySquares;
     }

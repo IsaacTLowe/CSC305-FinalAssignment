@@ -20,9 +20,7 @@ public class Metrics extends JPanel implements PropertyChangeListener{
         int height = getHeight();
         int radius = Math.min(width, height) / 3;
         super.paintComponent(g);
-        if(loading){
-            drawLoading(g, width, height);
-        }else if (ready){
+        if (ready){
             drawUseless(g, radius, width);
             drawPainful(g, radius, height);
             g.setColor(Color.BLACK);

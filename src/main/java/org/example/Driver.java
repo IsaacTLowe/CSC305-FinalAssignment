@@ -38,6 +38,7 @@ public class Driver implements Runnable {
             Blackboard.getInstance().setReady();
             Thread.sleep(1000);
         } catch (Exception e) {
+            Blackboard.getInstance().setErrorURL();
             e.printStackTrace();
         }
     }

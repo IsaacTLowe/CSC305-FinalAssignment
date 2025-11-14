@@ -70,10 +70,19 @@ public class FileDisplay extends JPanel implements PropertyChangeListener {
             loading = false;
             ready = true;
 
+            makeTree();
+            
+        }
+        repaint();
+    }
+
+    private void makeTree(){
             removeAll();
 
             List<Square> squares = Blackboard.getInstance().getSquares();
-
+            if(squares.isEmpty()){
+                return;
+            }
             List<String> paths = squares.stream()
                     .map(Square::getPath)
                     .toList();
@@ -92,9 +101,6 @@ public class FileDisplay extends JPanel implements PropertyChangeListener {
 
             add(scrollPane, BorderLayout.CENTER);
             revalidate();
-            repaint();
-        }
     }
-
 
 }

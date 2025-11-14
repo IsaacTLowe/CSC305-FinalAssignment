@@ -2,7 +2,6 @@ package org.example;
 
 import javax.swing.event.*;
 import javax.swing.tree.*;
-import java.io.File;
 
 public class FileDisplayController implements TreeSelectionListener {
 
