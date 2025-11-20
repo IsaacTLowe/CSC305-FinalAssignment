@@ -5,7 +5,7 @@ import javax.swing.tree.*;
 /**
  * FileDisplayController handles clicks on FileDisplay tree and stores selected in Blackboard.
  * @author Amelia Harris and Isaac Lowe
- * @version 2.2
+ * @version 1.0
  */
 public class FileDisplayController implements TreeSelectionListener {
 

@@ -6,7 +6,7 @@ import java.awt.*;
 /**
  * Handles the display of the Metrics graph on the display. Observes Blackboard.
  * @author Amelia Harris and Isaac Lowe
- * @version 2.2
+ * @version 1.0
  */
 
 public class Metrics extends JPanel implements PropertyChangeListener{

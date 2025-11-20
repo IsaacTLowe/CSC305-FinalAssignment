@@ -10,7 +10,7 @@ import java.util.List;
  * FileDisplay uses JTree to display all the files on the left hand side of the screen for users to click through.
  * Observes Blackboard.
  * @author Amelia Harris and Isaac Lowe
- * @version 2.2
+ * @version 1.0
  */
 
 public class FileDisplay extends JPanel implements PropertyChangeListener {

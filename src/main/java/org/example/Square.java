@@ -4,7 +4,7 @@ package org.example;
 /**
  * Square controls all aspects related to the Square's that are drawn on the screen
  * @author Amelia Harris and Isaac Lowe
- * @version 2.2
+ * @version 1.0
  */
 
 public class Square {

@@ -10,7 +10,7 @@ import java.beans.PropertyChangeListener;
 /**
  * Draws the board and squares, observes Blackboard property changes
  * @author Amelia Harris and Isaac Lowe
- * @version 2.2
+ * @version 1.0
  */
 
 public class Board extends JPanel implements PropertyChangeListener {

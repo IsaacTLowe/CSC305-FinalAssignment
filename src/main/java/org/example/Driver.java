@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Driver enables us to get files from the GitHub repository and stores in Blackboard
  * @author Amelia Harris and Isaac Lowe
- * @version 2.2
+ * @version 1.0
  */
 
 public class Driver implements Runnable {

@@ -7,7 +7,7 @@ import java.awt.*;
 /**
  * Puts everything together as well as creating the overall GUI for the program
  * @author Amelia Harris and Isaac Lowe
- * @version 2.2
+ * @version 1.0
  */
 
 public class Main extends JFrame {
@@ -20,7 +20,7 @@ public class Main extends JFrame {
         Board board = new Board();
         Metrics metric = new Metrics();
         JPanel diagram = new JPanel();
-        MainController controller = new MainController(urlField, statusBar);
+        MainController controller = new MainController(urlField);
         FileDisplay fileDisplay = new FileDisplay();
 
         setLayout(new BorderLayout());
@@ -38,12 +38,11 @@ public class Main extends JFrame {
         add(panel, BorderLayout.CENTER);
 
         okButton.addActionListener(controller);
-
     }
 
     public static void main(String[] args) {
         Main main = new Main();
-        main.setTitle("Assignment 3");
+        main.setTitle("Final Assignment");
         main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         main.setSize(800, 600);
         main.setVisible(true);

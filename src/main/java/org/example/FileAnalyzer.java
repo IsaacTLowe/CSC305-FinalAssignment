@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * FileAnalyzer analyzes the files to see for abstractness, size, dependencies, etc
  * @author Amelia Harris and Isaac Lowe
- * @version 2.2
+ * @version 1.0
  */
 
 public class FileAnalyzer {

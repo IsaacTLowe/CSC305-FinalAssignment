@@ -10,18 +10,14 @@ import java.beans.PropertyChangeListener;
  * Handles user clicking on Squares, clicking on the okButton to start the program, and the status bar's status. 
  * Observes Blackboard.
  * @author Amelia Harris and Isaac Lowe
- * @version 2.2
+ * @version 1.0
  */
 
-public class MainController implements ActionListener, PropertyChangeListener {
+public class MainController implements ActionListener {
     private JTextField urlField;
-    private JLabel statusBar;
 
-    public MainController(JTextField field, JLabel statusBar) {
+    public MainController(JTextField field) {
         this.urlField = field;
-        this.statusBar = statusBar;
-
-        Blackboard.getInstance().addPropertyChangeListener(this);
     }
 
     @Override
@@ -33,30 +29,4 @@ public class MainController implements ActionListener, PropertyChangeListener {
         }
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-
-        switch (evt.getPropertyName()) {
-
-            case "blackboardLoading":
-                statusBar.setText("Status: Loading...");
-                break;
-
-            case "blackboardReady":
-                statusBar.setText("Status: Ready");
-                break;
-
-            case "selectedStatus":
-                String file = (String) evt.getNewValue();
-                if (file != null && !file.isEmpty()) {
-                    statusBar.setText("Selected File: " + file);
-                } else {
-                    statusBar.setText("Selected File: (none)");
-                }
-                break;
-            case "errorURL":
-                statusBar.setText("Status: ERROR invalid URL");
-                break;
-        }
-    }
 }
