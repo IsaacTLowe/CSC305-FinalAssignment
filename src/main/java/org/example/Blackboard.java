@@ -19,6 +19,7 @@ public class Blackboard extends PropertyChangeSupport {
     private String url;
     private String selected;
     private String statusBarText;
+    private String umlSource;
 
     private Blackboard() {
         super(new Object());
@@ -114,6 +115,11 @@ public class Blackboard extends PropertyChangeSupport {
         String old = this.statusBarText;
         this.statusBarText = statusBarText;
         firePropertyChange("selectedStatus", old, statusBarText);
+    }
+
+    public void setUmlSource(String umlSource) {
+        this.umlSource = umlSource;
+        System.out.println("This is uml source: " + umlSource);
     }
 
 }

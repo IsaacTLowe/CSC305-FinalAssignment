@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -21,7 +23,11 @@ import net.sourceforge.plantuml.SourceStringReader;
  * @version 1.0
  */
 
-public class UMLPanel extends JPanel {
+public class UMLPanel extends JPanel implements PropertyChangeListener {
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+
+    }
 
     private BufferedImage image;
 
