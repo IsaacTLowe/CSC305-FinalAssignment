@@ -7,7 +7,7 @@ import java.util.Vector;
 /**
  * Stores data on the files, squares, url, selected file/folder, and is obserable
  * @author Amelia Harris and Isaac Lowe
- * @version 1.0
+ * @version 2.0
  */
 
 public class Blackboard extends PropertyChangeSupport {
@@ -24,6 +24,7 @@ public class Blackboard extends PropertyChangeSupport {
     private Blackboard() {
         super(new Object());
         squares = new Vector<>();
+        umlSource = "";
     }
 
     public static Blackboard getInstance() {
@@ -101,6 +102,7 @@ public class Blackboard extends PropertyChangeSupport {
         size = 0;
         url = "";
         selected = "";
+        umlSource = "";
     }
 
     public void setSelectedFile(String selected) {
@@ -117,9 +119,14 @@ public class Blackboard extends PropertyChangeSupport {
         firePropertyChange("selectedStatus", old, statusBarText);
     }
 
-    public void setUmlSource(String umlSource) {
-        this.umlSource = umlSource;
-        System.out.println("This is uml source: " + umlSource);
+    public void addUmlSource(String umlSource) {
+        if (!this.umlSource.contains(umlSource)) {
+        this.umlSource += umlSource;
+    }
+
+    }
+    public String getUmlSource() {
+        return umlSource;
     }
 
 }

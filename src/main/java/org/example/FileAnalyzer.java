@@ -1,9 +1,6 @@
 package org.example;
 
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * FileAnalyzer analyzes the files to see for abstractness, size, dependencies, etc
@@ -37,67 +34,50 @@ public class FileAnalyzer {
         return false;
     }
 
-    public static void determineRelationship(String fileData, String compareName) {
+    public static void determineRelationship(String fileData, String relationName, String dependentClass) {
         List<String> lines = List.of(fileData.split("\n"));
-        java.util.List<Square> squares = Blackboard.getInstance().getSquares();
-
-        StringBuilder relations = new StringBuilder();
-
+        
         for (String line : lines) {
             String trimmed = line.trim();
             if (trimmed.isEmpty() || trimmed.startsWith("//") || trimmed.startsWith("/*") || trimmed.startsWith("*")) {
                 continue;
             }
 
-            // 1️⃣ Inheritance
-            if (trimmed.contains("extends ") && trimmed.contains(compareName)) {
-                String[] tokens = trimmed.split("\\s+");
-                int idx = java.util.Arrays.asList(tokens).indexOf("extends");
-                if (idx >= 0 && idx + 1 < tokens.length) {
-                    String parent = tokens[idx + 1].replace("{", "").trim();
-                    if (!parent.isBlank() && !relations.toString().contains("Inheritance: " + parent)) {
-                        relations.append("Inheritance: ").append(parent).append("\n");
-                    }
-                }
+            //  Inheritance
+            if (trimmed.contains("extends ") && trimmed.contains(relationName)) {
+                
+                Blackboard.getInstance().addUmlSource(dependentClass+" --|> "+relationName +"\n");
+                
             }
 
-            // 2️⃣ Interface Implementation
-            if (trimmed.contains("implements ") && trimmed.contains(compareName)) {
-                String[] tokens = trimmed.split("\\s+");
-                int idx = java.util.Arrays.asList(tokens).indexOf("implements");
-                if (idx >= 0 && idx + 1 < tokens.length) {
-                    String iface = tokens[idx + 1].replace("{", "").trim();
-                    // only include if it's a project class
-                    boolean isProjectClass = false;
-                    for (Square sq : squares) {
-                        if (sq.getName().equals(iface)) {
-                            isProjectClass = true;
-                            break;
-                        }
-                    }
-                    if (isProjectClass && !relations.toString().contains("Implements: " + iface)) {
-                        relations.append("Implements: ").append(iface).append("\n");
-                    }
+            //  Interface Implementation
+            else if (trimmed.contains("implements ") && trimmed.contains(relationName)) {
+                    Blackboard.getInstance().addUmlSource(dependentClass+" ..|> "+relationName +"\n");
+                    
                 }
+                    
+            
+
+            //  Composition / Aggregation
+            
+
+                else if (trimmed.contains(relationName) && (trimmed.contains("private ") || trimmed.contains("protected ") || trimmed.contains("public "))) {
+                    if (trimmed.contains("= new " + relationName)) {
+                        Blackboard.getInstance().addUmlSource(dependentClass+" *-- "+relationName +"\n");
+                        
+                    } else {
+                        Blackboard.getInstance().addUmlSource(dependentClass+" o-- "+relationName +"\n");
+                        
+                    }
+                
+
             }
-
-            // 3️⃣ Composition / Aggregation
-            for (Square cls : squares) {
-                String clsName = cls.getName();
-                if (clsName.isBlank() || clsName.equals(compareName)) continue;
-
-                if (trimmed.contains(clsName)) {
-                    if (trimmed.contains("= new " + clsName) && !relations.toString().contains("Composition: " + clsName)) {
-                        relations.append("Composition: ").append(clsName).append("\n");
-                    } else if (!relations.toString().contains("Aggregation: " + clsName)) {
-                        relations.append("Aggregation: ").append(clsName).append("\n");
-                    }
-                }
+            // Association
+            else{
+                Blackboard.getInstance().addUmlSource(dependentClass+" --> "+relationName +"\n");
             }
         }
-
-        // Update Blackboard
-        Blackboard.getInstance().setUmlSource(relations.toString());
+        System.out.println("Final UML: " + Blackboard.getInstance().getUmlSource());
     }
 
 
@@ -118,7 +98,11 @@ public class FileAnalyzer {
             if (fileContent.contains(name)) {
                 compare.incIn();
                 currSquare.incOut();
-                determineRelationship(fileContent, name);
+                String currSquareName = currSquare.getName();
+                if (currSquareName.endsWith(".java")) {
+                    currSquareName = currSquareName.substring(0, currSquareName.length() - 5);
+                }
+                determineRelationship(fileContent, name, currSquareName);
             }
         }
         return count;

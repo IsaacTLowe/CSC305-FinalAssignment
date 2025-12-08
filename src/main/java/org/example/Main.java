@@ -19,9 +19,10 @@ public class Main extends JFrame {
 
         Board board = new Board();
         Metrics metric = new Metrics();
-        JPanel diagram = new JPanel();
+        UMLPanel diagram = new UMLPanel();
         MainController controller = new MainController(urlField);
         FileDisplay fileDisplay = new FileDisplay();
+        JScrollPane umlScrollPane = new JScrollPane(diagram);
 
         setLayout(new BorderLayout());
         topPanel.add(new JLabel("URL:"), BorderLayout.WEST);
@@ -33,7 +34,7 @@ public class Main extends JFrame {
         add(statusBar, BorderLayout.SOUTH);
         panel.add("Grid",board);
         panel.add("Metrics",metric);
-        panel.add("Diagram",diagram);
+        panel.add("Diagram",umlScrollPane);
         add(fileDisplay, BorderLayout.WEST);
         add(panel, BorderLayout.CENTER);
 
