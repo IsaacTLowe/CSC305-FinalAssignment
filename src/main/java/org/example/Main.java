@@ -20,7 +20,7 @@ public class Main extends JFrame {
         Board board = new Board();
         Metrics metric = new Metrics();
         UMLPanel diagram = new UMLPanel();
-        MainController controller = new MainController(urlField);
+        MainController controller = new MainController(urlField, statusBar);
         FileDisplay fileDisplay = new FileDisplay();
         JScrollPane umlScrollPane = new JScrollPane(diagram);
 

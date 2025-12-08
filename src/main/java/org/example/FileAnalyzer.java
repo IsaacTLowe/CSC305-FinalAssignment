@@ -15,6 +15,49 @@ public class FileAnalyzer {
         int size = lines.size();
 
         Blackboard.getInstance().setSize(size);
+
+        // *** ADDED: complexity calculation ***
+        int complexity = computeComplexity(fileData);
+        Blackboard.getInstance().setComplexity(complexity);
+    }
+
+    // *** ADDED: Compute complexity (decision points +1) ***
+    public static int computeComplexity(String fileData) {
+        int complexity = 1; // base complexity
+        List<String> lines = List.of(fileData.split("\n"));
+
+        for (String rawLine : lines) {
+            String line = rawLine.trim();
+
+            if (line.startsWith("//") || line.startsWith("/*") || line.startsWith("*"))
+                continue;
+
+            if (line.contains(" if ")) complexity++;
+            if (line.contains(" else if ")) complexity++;
+            if (line.contains(" for ")) complexity++;
+            if (line.contains(" while ")) complexity++;
+            if (line.contains(" do ")) complexity++;
+            if (line.contains(" switch ")) complexity++;
+            if (line.contains(" case ")) complexity++;
+            if (line.contains(" catch ")) complexity++;
+
+            // logical operators increase complexity
+            complexity += countMatches(line, "&&");
+            complexity += countMatches(line, "||");
+        }
+
+        return complexity;
+    }
+
+    // Helper for logical operator counting
+    private static int countMatches(String line, String token) {
+        int count = 0;
+        int idx = 0;
+        while ((idx = line.indexOf(token, idx)) != -1) {
+            count++;
+            idx += token.length();
+        }
+        return count;
     }
 
     public static boolean isAbstract(String fileData) {
@@ -36,7 +79,7 @@ public class FileAnalyzer {
 
     public static void determineRelationship(String fileData, String relationName, String dependentClass) {
         List<String> lines = List.of(fileData.split("\n"));
-        
+
         for (String line : lines) {
             String trimmed = line.trim();
             if (trimmed.isEmpty() || trimmed.startsWith("//") || trimmed.startsWith("/*") || trimmed.startsWith("*")) {
@@ -45,31 +88,31 @@ public class FileAnalyzer {
 
             //  Inheritance
             if (trimmed.contains("extends ") && trimmed.contains(relationName)) {
-                
+
                 Blackboard.getInstance().addUmlSource(dependentClass+" --|> "+relationName +"\n");
-                
+
             }
 
             //  Interface Implementation
             else if (trimmed.contains("implements ") && trimmed.contains(relationName)) {
-                    Blackboard.getInstance().addUmlSource(dependentClass+" ..|> "+relationName +"\n");
-                    
-                }
-                    
-            
+                Blackboard.getInstance().addUmlSource(dependentClass+" ..|> "+relationName +"\n");
+
+            }
+
+
 
             //  Composition / Aggregation
-            
 
-                else if (trimmed.contains(relationName) && (trimmed.contains("private ") || trimmed.contains("protected ") || trimmed.contains("public "))) {
-                    if (trimmed.contains("= new " + relationName)) {
-                        Blackboard.getInstance().addUmlSource(dependentClass+" *-- "+relationName +"\n");
-                        
-                    } else {
-                        Blackboard.getInstance().addUmlSource(dependentClass+" o-- "+relationName +"\n");
-                        
-                    }
-                
+
+            else if (trimmed.contains(relationName) && (trimmed.contains("private ") || trimmed.contains("protected ") || trimmed.contains("public "))) {
+                if (trimmed.contains("= new " + relationName)) {
+                    Blackboard.getInstance().addUmlSource(dependentClass+" *-- "+relationName +"\n");
+
+                } else {
+                    Blackboard.getInstance().addUmlSource(dependentClass+" o-- "+relationName +"\n");
+
+                }
+
 
             }
             // Association
@@ -94,7 +137,7 @@ public class FileAnalyzer {
             if (name.endsWith(".java")) {
                 name = name.substring(0, name.length() - 5);
             }
-            
+
             if (fileContent.contains(name)) {
                 compare.incIn();
                 currSquare.incOut();
@@ -108,6 +151,3 @@ public class FileAnalyzer {
         return count;
     }
 }
-
-
-

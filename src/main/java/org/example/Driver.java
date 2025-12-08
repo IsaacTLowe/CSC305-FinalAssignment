@@ -21,12 +21,18 @@ public class Driver implements Runnable {
 
     @Override
     public void run() {
-        Blackboard.getInstance().clear();
         try {
+            // Validate URL first
+            new java.net.URL(url); // MalformedURLException if bad
+
+            // Only clear for a valid load
+            Blackboard.getInstance().clear();
+
             String token = "TOKEN";
             GitHubHandler gh = new GitHubHandler(token);
             List<String> allFromUrl = gh.listFilesRecursive(url);
             Blackboard.getInstance().setUrl(url);
+
             for (String path : allFromUrl) {
                 if (path.endsWith(".java")) {
                     String content = gh.getFileContentFromUrl(convertToBlobUrl(url, path));
@@ -36,17 +42,25 @@ public class Driver implements Runnable {
                     Blackboard.getInstance().addSquare(square);
                 }
             }
+
             java.util.List<Square> totalSquares = Blackboard.getInstance().getSquares();
             for(Square currSquare : totalSquares){
                 FileAnalyzer.countOccurrences(currSquare);
             }
+
             Blackboard.getInstance().setReady();
             Thread.sleep(1000);
+
+        } catch (java.net.MalformedURLException e) {
+            // Invalid URL → fire error BEFORE anything else
+            Blackboard.getInstance().setErrorURL();
         } catch (Exception e) {
+            // Network/other errors
             Blackboard.getInstance().setErrorURL();
             e.printStackTrace();
         }
     }
+
 
     private int countLines(String content) {
         return (int) content.lines().count();
