@@ -35,7 +35,7 @@ public class UMLPanel extends JPanel implements PropertyChangeListener {
 
     public UMLPanel() {
         setBackground(Color.WHITE);
-        Blackboard.getInstance().addPropertyChangeListener(this);
+        MainSignaler.getInstance().addListener(this);
     }
 
     @Override

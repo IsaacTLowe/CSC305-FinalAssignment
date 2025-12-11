@@ -1,16 +1,14 @@
 package org.example;
 
-import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Vector;
 
 /**
- * Stores data on the files, squares, url, selected file/folder, and is obserable
+ * Pure data storage. All notifications are routed through MainSignaler.
  * @author Amelia Harris and Isaac Lowe
- * @version 2.0
+ * @version 1.1
  */
-
-public class Blackboard extends PropertyChangeSupport {
+public class Blackboard {
 
     private static Blackboard instance;
     private Vector<Square> squares;
@@ -23,7 +21,6 @@ public class Blackboard extends PropertyChangeSupport {
     private String umlSource;
 
     private Blackboard() {
-        super(new Object());
         squares = new Vector<>();
         umlSource = "";
     }
@@ -35,98 +32,52 @@ public class Blackboard extends PropertyChangeSupport {
         return instance;
     }
 
-    /**
-     * Attempts to load UML data from URL and reports detailed failures
-     */
+    // ------------------------------------------------------------
+    // URL LOADING
+    // ------------------------------------------------------------
+
     public void loadFromUrl(String url) {
         try {
             this.url = url;
 
-            // Attempt to construct the driver — if URL is malformed or null, this will fail.
+            // Delegate loading to Driver
             Driver driver = new Driver(url);
             Thread t = new Thread(driver);
             t.start();
 
-            // UI feedback: begin loading
             setLoading(true);
 
-        } catch (IllegalArgumentException malformed) {
-            // Driver likely threw due to malformed URL
-            notifyUrlError("Malformed URL: " + malformed.getMessage());
         } catch (Exception e) {
-            // Could be network, token, 401, timeout, etc
             notifyUrlError("Unexpected load error: " + e.getMessage());
         }
     }
 
-    // --------------------------
-    // URL ERROR REPORTING
-    // --------------------------
-
-    /**
-     * Sends status bar + property events for URL failures.
-     */
     private void notifyUrlError(String message) {
-        this.ready = false;
+        ready = false;
         setStatus("URL Error — " + message);
-        firePropertyChange("errorURL", false, true);
+        MainSignaler.getInstance().fire("errorURL", false, true);
     }
 
-    // --------------------------
-    // STATUS BAR MANAGEMENT
-    // --------------------------
+    // ------------------------------------------------------------
+    // STATUS BAR
+    // ------------------------------------------------------------
 
-    /**
-     * Updates the status bar with any text.
-     */
     public void setStatus(String newStatus) {
         String old = this.statusBarText;
         this.statusBarText = newStatus;
-        firePropertyChange("statusBar", old, newStatus);
+        MainSignaler.getInstance().fire("statusBar", old, newStatus);
     }
 
     public String getStatus() {
         return statusBarText;
     }
 
-    // --------------------------
-    // EXISTING METHODS
-    // --------------------------
-
-    public void setSize(int size){
-        this.size = size;
-    }
-
-    public int getSize() {
-        return size;
-    }
+    // ------------------------------------------------------------
+    // DATA STORAGE OPERATIONS
+    // ------------------------------------------------------------
 
     public void addSquare(Square square) {
         squares.add(square);
-    }
-
-    public void setReady() {
-        ready = true;
-        firePropertyChange("blackboardReady", false, true);
-        setStatus("Load complete.");
-    }
-
-    public void setLoading(boolean loading) {
-        this.ready = !loading;
-        firePropertyChange("blackboardLoading", false, loading);
-        if (loading) {
-            setStatus("Loading from URL...");
-        }
-    }
-
-    public void setErrorURL() {
-        ready = false;
-        firePropertyChange("errorURL", false, true);
-        setStatus("URL Error.");
-    }
-
-    public void setUrl(String url){
-        this.url=url;
     }
 
     public List<Square> getSquares() {
@@ -134,46 +85,72 @@ public class Blackboard extends PropertyChangeSupport {
     }
 
     public List<Square> getSquaresDisplay() {
-        Vector<Square> displaySquares = new Vector<>();
-        for(Square currSquare : squares){
-            String filePath = selected + "/"+currSquare.getName();
-            if(currSquare.getPath().equals(selected)){
-                filePath = selected;
-            }
-            if(currSquare.getPath().contains(filePath)){
-                displaySquares.add(currSquare);
+        Vector<Square> display = new Vector<>();
+
+        for (Square curr : squares) {
+            String filePath = selected + "/" + curr.getName();
+            if (curr.getPath().equals(selected)) filePath = selected;
+
+            if (curr.getPath().contains(filePath)) {
+                display.add(curr);
             }
         }
-        return displaySquares;
+        return display;
     }
 
-    public String getUrl(){
-        return url;
+    public void setReady() {
+        ready = true;
+        MainSignaler.getInstance().fire("blackboardReady", false, true);
+        setStatus("Load complete.");
     }
+
+    public void setLoading(boolean loading) {
+        ready = !loading;
+        MainSignaler.getInstance().fire("blackboardLoading", false, loading);
+
+        if (loading) setStatus("Loading from URL...");
+    }
+
+    public void setSelectedFile(String selected) {
+        String old = this.selected;
+        this.selected = selected;
+
+        MainSignaler.getInstance().fire("selectedFile", old, selected);
+
+        setSelectedStatus(selected);
+    }
+
+    public void setSelectedStatus(String status) {
+        String old = this.statusBarText;
+        this.statusBarText = status;
+
+        MainSignaler.getInstance().fire("selectedStatus", old, status);
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    // ------------------------------------------------------------
+    // OTHER FIELDS
+    // ------------------------------------------------------------
 
     public void clear() {
         squares.clear();
         ready = false;
-        boolean loading = false;
         size = 0;
         url = "";
         selected = "";
         umlSource = "";
     }
 
-    public void setSelectedFile(String selected) {
-        String old = this.selected;
-        this.selected = selected;
-        firePropertyChange("selectedFile", old, selected);
+    public String getUrl() { return url; }
 
-        setSelectedStatus(selected);
-    }
+    public int getSize() { return size; }
+    public void setSize(int size) { this.size = size; }
 
-    public void setSelectedStatus(String statusBarText) {
-        String old = this.statusBarText;
-        this.statusBarText = statusBarText;
-        firePropertyChange("selectedStatus", old, statusBarText);
-    }
+    public int getComplexity() { return complexity; }
+    public void setComplexity(int complexity) { this.complexity = complexity; }
 
     public void addUmlSource(String umlSource) {
         if (!this.umlSource.contains(umlSource)) {
@@ -185,8 +162,15 @@ public class Blackboard extends PropertyChangeSupport {
         return umlSource;
     }
 
-    public int getComplexity() { return complexity; }
+    // ------------------------------------------------------------
+// ERROR HANDLING
+// ------------------------------------------------------------
 
-    public void setComplexity(int complexity) { this.complexity = complexity; }
+    public void setErrorURL() {
+        ready = false;
+        MainSignaler.getInstance().fire("errorURL", false, true);
+        setStatus("URL Error.");
+    }
+
 
 }

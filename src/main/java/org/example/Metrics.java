@@ -17,7 +17,8 @@ public class Metrics extends JPanel implements PropertyChangeListener{
 
     public Metrics(){
         setBackground(Color.WHITE);
-        Blackboard.getInstance().addPropertyChangeListener(this);
+        MainSignaler.getInstance().addListener(this);
+
     }
     @Override
     protected void paintComponent(Graphics g) {

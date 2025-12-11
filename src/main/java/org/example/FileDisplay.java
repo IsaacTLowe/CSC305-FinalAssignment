@@ -19,7 +19,7 @@ public class FileDisplay extends JPanel implements PropertyChangeListener {
     private boolean ready;
 
     public FileDisplay() {
-        Blackboard.getInstance().addPropertyChangeListener(this);
+        MainSignaler.getInstance().addListener(this);
         setBackground(Color.LIGHT_GRAY);
         setPreferredSize(new Dimension(200, 300));
         setLayout(new BorderLayout());

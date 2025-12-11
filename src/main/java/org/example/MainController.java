@@ -19,7 +19,7 @@ public class MainController implements ActionListener, PropertyChangeListener {
         this.urlField = field;
         this.statusBar = statusBar;
 
-        Blackboard.getInstance().addPropertyChangeListener(this);
+        MainSignaler.getInstance().addListener(this);
     }
 
     @Override

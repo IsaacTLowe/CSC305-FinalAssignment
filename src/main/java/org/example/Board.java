@@ -6,28 +6,29 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 /**
- * Draws the board and squares, observes Blackboard property changes
+ * Draws the board and squares, observes MainSignaler events
  * @author Amelia Harris and Isaac Lowe
- * @version 1.0
+ * @version 1.1
  */
-
 public class Board extends JPanel implements PropertyChangeListener {
     private boolean loading = false;
     private boolean ready = false;
     private int maxLines = 0;
-    private java.util.List<Square> squares;
+    private List<Square> squares;
 
     public Board() {
         setBackground(Color.WHITE);
-        Blackboard.getInstance().addPropertyChangeListener(this);
+        MainSignaler.getInstance().addListener(this);
 
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Square clicked = getSquareAt(e.getX(), e.getY());
                 if (clicked != null) {
+                    // Clicking only updates the status bar
                     Blackboard.getInstance().setSelectedStatus(clicked.getPath());
                 }
             }
@@ -36,16 +37,19 @@ public class Board extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println(evt.getPropertyName());
-        if (evt.getPropertyName().equals("blackboardLoading")) {
-            loading = true;
-            ready = false;
-        } else if (evt.getPropertyName().equals("blackboardReady")) {
-            loading = false;
-            ready = true;
-            squares = Blackboard.getInstance().getSquares();
-        } else if (evt.getPropertyName().equals("selectedFile")) {
-            squares = Blackboard.getInstance().getSquaresDisplay();
+        switch (evt.getPropertyName()) {
+            case "blackboardLoading":
+                loading = true;
+                ready = false;
+                break;
+            case "blackboardReady":
+                loading = false;
+                ready = true;
+                squares = Blackboard.getInstance().getSquares();
+                break;
+            case "selectedFile":
+                squares = Blackboard.getInstance().getSquaresDisplay();
+                break;
         }
         repaint();
     }
@@ -53,25 +57,23 @@ public class Board extends JPanel implements PropertyChangeListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (ready) {
+        if (ready && squares != null) {
             drawSquares(g);
         }
     }
 
     private void drawSquares(Graphics g) {
-        if(squares.isEmpty()){
-            return;
-        }
-        for (Square s : squares) {
-            if (s.getLinesOfCode() > maxLines) {
-                maxLines = s.getLinesOfCode();
-            }
-        }
-        
+        if (squares.isEmpty()) return;
+
+        // Compute max lines for color ratio
+        maxLines = squares.stream().mapToInt(Square::getLinesOfCode).max().orElse(1);
+        int complexity = Blackboard.getInstance().getComplexity();
+
         int cols = (int) Math.ceil(Math.sqrt(squares.size()));
         int rows = (int) Math.ceil((double) squares.size() / cols);
         int squareWidth = getWidth() / cols;
         int squareHeight = getHeight() / rows;
+
         for (int i = 0; i < squares.size(); i++) {
             Square square = squares.get(i);
             int row = i / cols;
@@ -79,35 +81,37 @@ public class Board extends JPanel implements PropertyChangeListener {
             int x = col * squareWidth;
             int y = row * squareHeight;
 
-            Color color = calculateColor(square.getLinesOfCode());
+            Color color = calculateColor(square.getLinesOfCode(), complexity);
             g.setColor(color);
             g.fillRect(x, y, squareWidth - 2, squareHeight - 2);
 
             g.setColor(Color.BLACK);
             g.drawRect(x, y, squareWidth - 2, squareHeight - 2);
 
-            setFont(new Font("Arial", Font.PLAIN, 6));
-            String text = square.getName() + "(" + square.getLinesOfCode() + ")";
-            g.drawString(text, x + 5, y + 15);
+            g.setFont(new Font("Arial", Font.PLAIN, 6));
+            g.drawString(square.getName() + "(" + square.getLinesOfCode() + ")", x + 5, y + 15);
         }
     }
 
-
-    private Color calculateColor(int lines) {
+    private Color calculateColor(int lines, int complexity) {
         double ratio = (double) lines / maxLines;
 
+        int r, g, b;
         if (ratio <= 1.0 / 3.0) {
-            return new Color(180, 240, 180);
+            r = 180; g = 240; b = 180;
         } else if (ratio <= 2.0 / 3.0) {
-            return new Color(255, 245, 150);
+            r = 255; g = 245; b = 150;
         } else {
-            return new Color(240, 140, 140);
+            r = 240; g = 140; b = 140;
         }
+
+        // Map complexity (0–100) → alpha (50–255)
+        int alpha = Math.min(255, Math.max(50, (int)((complexity / 100.0) * 255)));
+        return new Color(r, g, b, alpha);
     }
 
     private Square getSquareAt(int x, int y) {
-        java.util.List<Square> squares = Blackboard.getInstance().getSquares();
-        if (squares.isEmpty()) return null;
+        if (squares == null || squares.isEmpty()) return null;
 
         int cols = (int) Math.ceil(Math.sqrt(squares.size()));
         int rows = (int) Math.ceil((double) squares.size() / cols);
