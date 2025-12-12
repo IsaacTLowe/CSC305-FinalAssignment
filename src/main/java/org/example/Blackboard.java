@@ -32,15 +32,13 @@ public class Blackboard {
         return instance;
     }
 
-    // ------------------------------------------------------------
-    // URL LOADING
-    // ------------------------------------------------------------
+
 
     public void loadFromUrl(String url) {
         try {
             this.url = url;
 
-            // Delegate loading to Driver
+           
             Driver driver = new Driver(url);
             Thread t = new Thread(driver);
             t.start();
@@ -72,9 +70,7 @@ public class Blackboard {
         return statusBarText;
     }
 
-    // ------------------------------------------------------------
-    // DATA STORAGE OPERATIONS
-    // ------------------------------------------------------------
+
 
     public void addSquare(Square square) {
         squares.add(square);
@@ -131,9 +127,6 @@ public class Blackboard {
         this.url = url;
     }
 
-    // ------------------------------------------------------------
-    // OTHER FIELDS
-    // ------------------------------------------------------------
 
     public void clear() {
         squares.clear();
@@ -153,7 +146,7 @@ public class Blackboard {
     public void setComplexity(int complexity) { this.complexity = complexity; }
 
     public void addUmlSource(String umlSource) {
-        if (!this.umlSource.contains(umlSource)) {
+        if(!this.umlSource.contains(umlSource)){
             this.umlSource += umlSource;
         }
     }
@@ -162,9 +155,6 @@ public class Blackboard {
         return umlSource;
     }
 
-    // ------------------------------------------------------------
-// ERROR HANDLING
-// ------------------------------------------------------------
 
     public void setErrorURL() {
         ready = false;

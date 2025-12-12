@@ -1,9 +1,9 @@
 package org.example;
 
 
-import javiergs.tulip.GitHubHandler;
-
 import java.util.List;
+
+import javiergs.tulip.GitHubHandler;
 
 /**
  * Driver enables us to get files from the GitHub repository and stores in Blackboard
@@ -22,14 +22,15 @@ public class Driver implements Runnable {
     @Override
     public void run() {
         try {
-            // Validate URL first
-            new java.net.URL(url); // MalformedURLException if bad
+            
+            new java.net.URL(url);
 
-            // Only clear for a valid load
+            
             Blackboard.getInstance().clear();
 
             String token = "TOKEN";
             GitHubHandler gh = new GitHubHandler(token);
+            FileAnalyzer fileAnalyzer = new FileAnalyzer();
             List<String> allFromUrl = gh.listFilesRecursive(url);
             Blackboard.getInstance().setUrl(url);
 
@@ -37,7 +38,7 @@ public class Driver implements Runnable {
                 if (path.endsWith(".java")) {
                     String content = gh.getFileContentFromUrl(convertToBlobUrl(url, path));
                     int lines = countLines(content);
-                    boolean abstraction = FileAnalyzer.isAbstract(content);
+                    boolean abstraction = fileAnalyzer.isAbstract(content);
                     Square square = new Square(path, lines, abstraction, content);
                     Blackboard.getInstance().addSquare(square);
                 }
@@ -45,17 +46,18 @@ public class Driver implements Runnable {
 
             java.util.List<Square> totalSquares = Blackboard.getInstance().getSquares();
             for(Square currSquare : totalSquares){
-                FileAnalyzer.countOccurrences(currSquare);
+                String resultUml = fileAnalyzer.countOccurrences(currSquare, totalSquares);
+                Blackboard.getInstance().addUmlSource(resultUml);
             }
 
             Blackboard.getInstance().setReady();
             Thread.sleep(1000);
 
         } catch (java.net.MalformedURLException e) {
-            // Invalid URL → fire error BEFORE anything else
+            
             Blackboard.getInstance().setErrorURL();
         } catch (Exception e) {
-            // Network/other errors
+            
             Blackboard.getInstance().setErrorURL();
             e.printStackTrace();
         }

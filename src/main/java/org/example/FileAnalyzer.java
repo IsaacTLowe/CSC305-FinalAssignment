@@ -5,25 +5,19 @@ import java.util.List;
 /**
  * FileAnalyzer analyzes the files to see for abstractness, size, dependencies, etc
  * @author Amelia Harris and Isaac Lowe
- * @version 1.0
+ * @version 1.2
  */
 
 public class FileAnalyzer {
 
-    public static void analyze(String fileData) {
+    public int analyzeSize(String fileData) {
         List<String> lines = List.of(fileData.split("\n"));
         int size = lines.size();
-
-        Blackboard.getInstance().setSize(size);
-
-        // *** ADDED: complexity calculation ***
-        int complexity = computeComplexity(fileData);
-        Blackboard.getInstance().setComplexity(complexity);
+        return size;
     }
 
-    // *** ADDED: Compute complexity (decision points +1) ***
-    public static int computeComplexity(String fileData) {
-        int complexity = 1; // base complexity
+    public int computeComplexity(String fileData) {
+        int complexity = 1;
         List<String> lines = List.of(fileData.split("\n"));
 
         for (String rawLine : lines) {
@@ -41,7 +35,6 @@ public class FileAnalyzer {
             if (line.contains(" case ")) complexity++;
             if (line.contains(" catch ")) complexity++;
 
-            // logical operators increase complexity
             complexity += countMatches(line, "&&");
             complexity += countMatches(line, "||");
         }
@@ -49,8 +42,7 @@ public class FileAnalyzer {
         return complexity;
     }
 
-    // Helper for logical operator counting
-    private static int countMatches(String line, String token) {
+    private int countMatches(String line, String token) {
         int count = 0;
         int idx = 0;
         while ((idx = line.indexOf(token, idx)) != -1) {
@@ -60,7 +52,7 @@ public class FileAnalyzer {
         return count;
     }
 
-    public static boolean isAbstract(String fileData) {
+    public boolean isAbstract(String fileData) {
         List<String> lines = List.of(fileData.split("\n"));
 
         for (String line : lines) {
@@ -77,8 +69,9 @@ public class FileAnalyzer {
         return false;
     }
 
-    public static void determineRelationship(String fileData, String relationName, String dependentClass) {
+    public String determineRelationship(String fileData, String relationName, String dependentClass) {
         List<String> lines = List.of(fileData.split("\n"));
+        
 
         for (String line : lines) {
             String trimmed = line.trim();
@@ -86,47 +79,48 @@ public class FileAnalyzer {
                 continue;
             }
 
-            //  Inheritance
             if (trimmed.contains("extends ") && trimmed.contains(relationName)) {
-
-                Blackboard.getInstance().addUmlSource(dependentClass+" --|> "+relationName +"\n");
+                return(dependentClass+" --|> "+relationName +"\n");
+            
+                //Blackboard.getInstance().addUmlSource(dependentClass+" --|> "+relationName +"\n");
 
             }
 
-            //  Interface Implementation
             else if (trimmed.contains("implements ") && trimmed.contains(relationName)) {
-                Blackboard.getInstance().addUmlSource(dependentClass+" ..|> "+relationName +"\n");
-
+                
+                return(dependentClass+" ..|> "+relationName +"\n");
             }
-
-
-
-            //  Composition / Aggregation
-
 
             else if (trimmed.contains(relationName) && (trimmed.contains("private ") || trimmed.contains("protected ") || trimmed.contains("public "))) {
                 if (trimmed.contains("= new " + relationName)) {
-                    Blackboard.getInstance().addUmlSource(dependentClass+" *-- "+relationName +"\n");
+                    
+                        return(dependentClass+" *-- "+relationName +"\n");
 
                 } else {
-                    Blackboard.getInstance().addUmlSource(dependentClass+" o-- "+relationName +"\n");
+                    
+                        return(dependentClass+" o-- "+relationName +"\n");
 
                 }
 
+            }
 
-            }
-            // Association
             else{
-                Blackboard.getInstance().addUmlSource(dependentClass+" --> "+relationName +"\n");
+                
+                if(trimmed.contains(relationName)){
+                    return(dependentClass+" --> "+relationName +"\n");
+                }
+                    
             }
+            
         }
-        System.out.println("Final UML: " + Blackboard.getInstance().getUmlSource());
+        
+        return "";
     }
 
 
-    public static int countOccurrences(Square currSquare) {
-        java.util.List<Square> squares = Blackboard.getInstance().getSquares();
-        int count = 0;
+    public String countOccurrences(Square currSquare, java.util.List<Square> squares) {
+        
+        String relations = "";
 
         for (Square compare: squares) {
             String fileContent = currSquare.getFileContent();
@@ -145,9 +139,13 @@ public class FileAnalyzer {
                 if (currSquareName.endsWith(".java")) {
                     currSquareName = currSquareName.substring(0, currSquareName.length() - 5);
                 }
-                determineRelationship(fileContent, name, currSquareName);
+                String newRelation = determineRelationship(fileContent, name, currSquareName);
+                if(!relations.contains(newRelation)){
+                    relations += newRelation;
+                }
+                
             }
         }
-        return count;
+        return relations;
     }
 }

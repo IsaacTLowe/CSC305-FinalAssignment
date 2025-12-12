@@ -1,6 +1,5 @@
 package org.example;
 
-import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
@@ -122,7 +122,7 @@ public class UMLPanel extends JPanel implements PropertyChangeListener {
             // Check if this line mentions any visible class
             boolean keep = false;
             for (String cls : visibleNames) {
-                if (trimmed.contains(cls)) {
+                if (trimmed.contains(cls+" ")) {
                     keep = true;
                     break;
                 }
@@ -132,6 +132,7 @@ public class UMLPanel extends JPanel implements PropertyChangeListener {
                 filtered.append(line).append("\n");
             }
             System.out.println("Filtered UML: " + filtered.toString());
+            System.out.println("Blackboard UML: "+Blackboard.getInstance().getUmlSource());
         }
 
         return filtered.toString();
