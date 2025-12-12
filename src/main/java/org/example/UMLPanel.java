@@ -113,13 +113,12 @@ public class UMLPanel extends JPanel implements PropertyChangeListener {
 
         // 2. Filter UML lines
         StringBuilder filtered = new StringBuilder();
-        String[] lines = umlSource.split("\\R"); // split on any line break
+        String[] lines = umlSource.split("\\R"); 
 
         for (String line : lines) {
             String trimmed = line.trim();
             if (trimmed.isEmpty()) continue;
 
-            // Check if this line mentions any visible class
             boolean keep = false;
             for (String cls : visibleNames) {
                 if (trimmed.contains(cls+" ")) {

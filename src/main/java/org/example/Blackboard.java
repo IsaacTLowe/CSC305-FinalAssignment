@@ -56,9 +56,7 @@ public class Blackboard {
         MainSignaler.getInstance().fire("errorURL", false, true);
     }
 
-    // ------------------------------------------------------------
-    // STATUS BAR
-    // ------------------------------------------------------------
+ 
 
     public void setStatus(String newStatus) {
         String old = this.statusBarText;

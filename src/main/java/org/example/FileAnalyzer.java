@@ -82,8 +82,6 @@ public class FileAnalyzer {
             if (trimmed.contains("extends ") && trimmed.contains(relationName)) {
                 return(dependentClass+" --|> "+relationName +"\n");
             
-                //Blackboard.getInstance().addUmlSource(dependentClass+" --|> "+relationName +"\n");
-
             }
 
             else if (trimmed.contains("implements ") && trimmed.contains(relationName)) {

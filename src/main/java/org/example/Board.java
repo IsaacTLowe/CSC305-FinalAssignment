@@ -1,12 +1,15 @@
 package org.example;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
+
+import javax.swing.JPanel;
 
 /**
  * Draws the board and squares, observes MainSignaler events
@@ -105,7 +108,6 @@ public class Board extends JPanel implements PropertyChangeListener {
             r = 240; g = 140; b = 140;
         }
 
-        // Map complexity (0–100) → alpha (50–255)
         int alpha = Math.min(255, Math.max(50, (int)((complexity / 100.0) * 255)));
         return new Color(r, g, b, alpha);
     }
